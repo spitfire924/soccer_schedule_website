@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ event.name }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        h2, h3 {
+            margin-top: 30px;
+            color: #333;
+        }
+        p {
+            color: #666;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        form {
+            display: inline;
+        }
+        input[type="text"] {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+        button[type="submit"] {
+            padding: 8px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>{{ event.name }}</h1>
+        <p><strong>Date:</strong> {{ event.date }}</p>
+        <p><strong>Location:</strong> {{ event.location }}</p>
+        <p><strong>Participant Count:</strong> {{ event.count_participants() }}</p>
+        <h2>Participants</h2>
+        <ul>
+            {% for participant in event.list_participants() %}
+            <li>
+                <form action="{{ url_for('remove_participant', event_id=event_id, participant=participant) }}" method="post">
+                    <input type="hidden" name="participant" value="{{ participant }}">
+                    <button type="submit">Remove</button>
+                </form>
+                {{ loop.index }}. {{ participant }}
+            </li>
+            {% endfor %}
+        </ul>
+        <h3>Add Participant</h3>
+        <form action="{{ url_for('add_participant', event_id=event_id) }}" method="post">
+            <input type="text" name="participant" placeholder="Participant Name">
+            <button type="submit">Add Participant</button>
+        </form>
+    </div>
+</body>
+</html>
